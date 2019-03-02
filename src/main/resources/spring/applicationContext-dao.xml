@@ -16,32 +16,60 @@
     <!--加载数据库配置文件-->
     <context:property-placeholder location="classpath:mysql.properties" />
 
-    <!--配置数据源 c3p0l连接池-->
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" >
-        <property name="driverClass" value="${jdbc.driver}" />
-        <property name="jdbcUrl" value="${jdbc.url}" />
-        <property name="user" value="${jdbc.username}" />
+    <!-- 配置数据库连接池 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
         <property name="password" value="${jdbc.password}" />
+
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="1" />
+        <property name="minIdle" value="1" />
+        <property name="maxActive" value="20" />
+
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="60000" />
+
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+
+        <property name="validationQuery" value="SELECT 1" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
     </bean>
 
-    <!--配置SqlSessionFactory-->
-    <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <!--加载mybatis配置文件-->
-        <property name="configLocation" value="classpath:mybatis/mybatis.cfg.xml"/>
-        <!--数据源-->
+    <!--Mybatis的SessionFactory配置-->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="typeAliasesPackage" value="com.system.po" />
         <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
     </bean>
+
+    <!--Mybatis的Mapper文件识别-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.system.mapper"/>
+    </bean>
+
 
     <!--Mapper批量扫描，从Mapper包扫描接口，自动创建代理对象，并在Spring容器中自动注册
     使用 Mybatis与Spring整合包的这个 Mapper 扫描器后， Mybatis 配置文件里的扫描器，就可以取消掉了
     遵循的规范 不变
     自动扫描出来的Mapper的bean的id为Mapper类名（首字母小写）
     -->
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <!--如果需要扫描多个报下的mapper,每个包中间使用半角逗号分开-->
+   <!-- <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        &lt;!&ndash;如果需要扫描多个报下的mapper,每个包中间使用半角逗号分开&ndash;&gt;
         <property name="basePackage" value="com.system.mapper" />
         <property name="sqlSessionFactoryBeanName" value="sessionFactory" />
-    </bean>
+    </bean>-->
 
 
 
