@@ -4,6 +4,7 @@ package com.system.po;
  * teacher扩展类
  */
 public class TeacherCustom extends Teacher {
+
     //所属院系名
     private String collegeName;
 

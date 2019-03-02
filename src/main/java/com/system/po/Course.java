@@ -1,6 +1,7 @@
 package com.system.po;
 
 public class Course {
+
     private Integer courseid;
 
     private String coursename;

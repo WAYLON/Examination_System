@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class TeacherExample {
+
     protected String orderByClause;
 
     protected boolean distinct;

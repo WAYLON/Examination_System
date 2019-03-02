@@ -1,6 +1,7 @@
 package com.system.po;
 
 public class Role {
+
     private Integer roleid;
 
     private String rolename;

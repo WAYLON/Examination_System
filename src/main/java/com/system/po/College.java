@@ -1,6 +1,7 @@
 package com.system.po;
 
 public class College {
+
     private Integer collegeid;
 
     private String collegename;

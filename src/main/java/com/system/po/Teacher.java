@@ -3,6 +3,7 @@ package com.system.po;
 import java.util.Date;
 
 public class Teacher {
+
     private Integer userid;
 
     private String username;

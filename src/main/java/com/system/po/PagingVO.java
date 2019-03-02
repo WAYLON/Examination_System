@@ -7,14 +7,19 @@ public class PagingVO {
 
     //当前页码,默认第一页
     private int curentPageNo = 1;
+
     //总页数
     private int totalCount;
+
     //页面容量
-    private int pageSize=5;
+    private int pageSize=10;
+
     //上一页
     private int upPageNo;
+
     //下一页
     private int nextPageNo;
+
     //要前往的页码,默认0
     private int toPageNo = 0;
 

@@ -4,6 +4,7 @@ package com.system.po;
  * Created by Jacey on 2017/6/29.
  */
 public class SelectedCourseCustom extends Selectedcourse {
+
     //新增Student 对象字段
     private StudentCustom studentCustom;
 

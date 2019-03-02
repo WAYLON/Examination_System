@@ -1,6 +1,5 @@
 package com.system.realm;
 
-import com.system.mapper.UserloginMapper;
 import com.system.po.Role;
 import com.system.po.Userlogin;
 import com.system.service.RoleService;
@@ -10,7 +9,6 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -35,11 +33,8 @@ public class LoginRealm extends AuthorizingRealm{
      *     当调用权限验证时，就会调用此方法
      */
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-
         String username = (String) getAvailablePrincipal(principalCollection);
-
         Role role = null;
-
         try {
             Userlogin userlogin = userloginService.findByName(username);
             //获取角色对象
