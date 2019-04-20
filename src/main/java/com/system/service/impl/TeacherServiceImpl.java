@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Jacey on 2017/6/29.
- */
+
 @Service
 public class TeacherServiceImpl implements TeacherService {
 
@@ -60,7 +58,6 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     public Boolean save(TeacherCustom teacherCustom) throws Exception {
-
         Teacher tea = teacherMapper.selectByPrimaryKey(teacherCustom.getUserid());
         if (tea == null) {
             teacherMapper.insert(teacherCustom);

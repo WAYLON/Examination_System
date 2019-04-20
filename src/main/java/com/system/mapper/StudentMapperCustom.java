@@ -5,9 +5,7 @@ import com.system.po.StudentCustom;
 
 import java.util.List;
 
-/**
- * Created by Jacey on 2017/6/28.
- */
+
 public interface StudentMapperCustom {
 
     //分页查询学生信息

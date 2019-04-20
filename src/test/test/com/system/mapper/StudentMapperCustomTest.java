@@ -12,9 +12,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by Jacey on 2017/6/28.
- */
+
 public class StudentMapperCustomTest {
 
 

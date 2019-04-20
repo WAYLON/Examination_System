@@ -1,12 +1,12 @@
 package com.system.mapper;
 
-import com.system.po.College;
-import com.system.po.CollegeExample;
+import com.system.po.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface CollegeMapper {
+
     int countByExample(CollegeExample example);
 
     int deleteByExample(CollegeExample example);
@@ -28,4 +28,5 @@ public interface CollegeMapper {
     int updateByPrimaryKeySelective(College record);
 
     int updateByPrimaryKey(College record);
+
 }

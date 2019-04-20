@@ -13,9 +13,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Jacey on 2017/6/29.
- */
+
 @Service
 public class SelectedCourseServiceImpl implements SelectedCourseService {
 
@@ -71,41 +69,29 @@ public class SelectedCourseServiceImpl implements SelectedCourseService {
 
     //查询指定学生成绩
     public SelectedCourseCustom findOne(SelectedCourseCustom selectedCourseCustom) throws Exception {
-
         SelectedcourseExample example = new SelectedcourseExample();
         SelectedcourseExample.Criteria criteria = example.createCriteria();
-
         criteria.andCourseidEqualTo(selectedCourseCustom.getCourseid());
         criteria.andStudentidEqualTo(selectedCourseCustom.getStudentid());
-
         List<Selectedcourse> list = selectedcourseMapper.selectByExample(example);
-
-
         if (list.size() > 0) {
             SelectedCourseCustom sc = new SelectedCourseCustom();
             BeanUtils.copyProperties(list.get(0), sc);
-
             Student student = studentMapper.selectByPrimaryKey(selectedCourseCustom.getStudentid());
             StudentCustom studentCustom = new StudentCustom();
             BeanUtils.copyProperties(student, studentCustom);
-
             sc.setStudentCustom(studentCustom);
-
             return sc;
         }
-
         return null;
     }
 
     public void updataOne(SelectedCourseCustom selectedCourseCustom) throws Exception {
         SelectedcourseExample example = new SelectedcourseExample();
         SelectedcourseExample.Criteria criteria = example.createCriteria();
-
         criteria.andCourseidEqualTo(selectedCourseCustom.getCourseid());
         criteria.andStudentidEqualTo(selectedCourseCustom.getStudentid());
-
         selectedcourseMapper.updateByExample(selectedCourseCustom, example);
-
     }
 
     public void save(SelectedCourseCustom selectedCourseCustom) throws Exception {
@@ -119,10 +105,8 @@ public class SelectedCourseServiceImpl implements SelectedCourseService {
     public void remove(SelectedCourseCustom selectedCourseCustom) throws Exception {
         SelectedcourseExample example = new SelectedcourseExample();
         SelectedcourseExample.Criteria criteria = example.createCriteria();
-
         criteria.andCourseidEqualTo(selectedCourseCustom.getCourseid());
         criteria.andStudentidEqualTo(selectedCourseCustom.getStudentid());
-
         selectedcourseMapper.deleteByExample(example);
     }
 

@@ -7,9 +7,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-/**
- * Created by Jacey on 2017/6/28.
- */
+
 public class UserloginMapperCustomTest {
 
     private ApplicationContext applicationContext;

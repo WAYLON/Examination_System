@@ -3,8 +3,6 @@ package com.system.controller;
 import com.system.exception.CustomException;
 import com.system.po.*;
 import com.system.service.*;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +12,6 @@ import javax.annotation.Resource;
 import java.util.List;
 
 
-/**
- * Created by Jacey on 2017/6/30.
- */
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -36,12 +31,90 @@ public class AdminController {
     @Resource(name = "userloginServiceImpl")
     private UserloginService userloginService;
 
+
+     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<院系操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+    @RequestMapping("/showCollege")
+     public String showCollege(Model model, Integer page)throws Exception {
+        List<CollegeCustom> list ;
+        PagingVO pagingVO = new PagingVO();
+        pagingVO.setTotalCount(collegeService.countTotal());
+        if (page == null || page == 0) {
+            pagingVO.setToPageNo(1);
+            list = collegeService.findByPaging(1);
+        } else {
+            pagingVO.setToPageNo(page);
+            list = collegeService.findByPaging(page);
+        }
+        model.addAttribute("collegeList", list);
+        model.addAttribute("pagingVO", pagingVO);
+         return "admin/showCollege";
+     }
+
+    //  添加学生信息页面显示
+    @RequestMapping(value = "/addCollege", method = {RequestMethod.GET})
+    public String addCollegeUI(Model model) throws Exception {
+        return "admin/addCollege";
+    }
+
+    // 添加院系信息操作
+    @RequestMapping(value = "/addCollege", method = {RequestMethod.POST})
+    public String addCollage(CollegeCustom collegeCustom, Model model) throws Exception {
+        Boolean result = collegeService.save(collegeCustom);
+        if (!result) {
+            model.addAttribute("message", "已经存在该院系");
+            return "error";
+        }
+        return "redirect:/admin/showCollege";
+    }
+
+    // 修改院系信息页面显示
+    @RequestMapping(value = "/editCollege", method = {RequestMethod.GET})
+    public String editColleageUI(Integer id, Model model) throws Exception {
+        if (id == null) {
+            //加入没有带学生id就进来的话就返回学生显示页面
+            return "redirect:/admin/showCollege";
+        }
+        CollegeCustom collegeCustom = collegeService.findById(id);
+        if (collegeCustom == null) {
+            throw new CustomException("未找到该院系");
+        }
+        model.addAttribute("college", collegeCustom);
+        return "admin/editCollege";
+    }
+
+    // 修改院系信息处理
+    @RequestMapping(value = "/editCollege", method = {RequestMethod.POST})
+    public String editStudent(CollegeCustom collegeCustom) throws Exception {
+        collegeService.updataById(collegeCustom.getCollegeid(), collegeCustom);
+        //重定向
+        return "redirect:/admin/showCollege";
+    }
+
+    // 删除院系
+    @RequestMapping(value = "/removeCollege", method = {RequestMethod.GET} )
+    public String removeColleage(Integer id) throws Exception {
+        if (id == null) {
+            //加入没有带学生id就进来的话就返回学生显示页面
+            return "admin/showCollege";
+        }
+        collegeService.removeById(id);
+        return "redirect:/admin/showCollege";
+    }
+
+    // 搜索学生
+    @RequestMapping(value = "selectCollege", method = {RequestMethod.POST})
+    public String selectColleage(String findByName, Model model) throws Exception {
+        List<CollegeCustom> list = collegeService.findByName(findByName);
+        model.addAttribute("collegeList", list);
+        return "admin/showCollege";
+    }
+
+
     /*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<学生操作>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
     //  学生信息显示
     @RequestMapping("/showStudent")
     public String showStudent(Model model, Integer page) throws Exception {
-
         List<StudentCustom> list = null;
         //页码对象
         PagingVO pagingVO = new PagingVO();
@@ -54,31 +127,24 @@ public class AdminController {
             pagingVO.setToPageNo(page);
             list = studentService.findByPaging(page);
         }
-
         model.addAttribute("studentList", list);
         model.addAttribute("pagingVO", pagingVO);
-
         return "admin/showStudent";
-
     }
+
 
     //  添加学生信息页面显示
     @RequestMapping(value = "/addStudent", method = {RequestMethod.GET})
     public String addStudentUI(Model model) throws Exception {
-
         List<College> list = collegeService.finAll();
-
         model.addAttribute("collegeList", list);
-
         return "admin/addStudent";
     }
 
      // 添加学生信息操作
     @RequestMapping(value = "/addStudent", method = {RequestMethod.POST})
     public String addStudent(StudentCustom studentCustom, Model model) throws Exception {
-
         Boolean result = studentService.save(studentCustom);
-
         if (!result) {
             model.addAttribute("message", "学号重复");
             return "error";
@@ -89,8 +155,6 @@ public class AdminController {
         userlogin.setPassword("123");
         userlogin.setRole(2);
         userloginService.save(userlogin);
-
-        //重定向
         return "redirect:/admin/showStudent";
     }
 
@@ -106,20 +170,15 @@ public class AdminController {
             throw new CustomException("未找到该名学生");
         }
         List<College> list = collegeService.finAll();
-
         model.addAttribute("collegeList", list);
         model.addAttribute("student", studentCustom);
-
-
         return "admin/editStudent";
     }
 
     // 修改学生信息处理
     @RequestMapping(value = "/editStudent", method = {RequestMethod.POST})
     public String editStudent(StudentCustom studentCustom) throws Exception {
-
         studentService.updataById(studentCustom.getUserid(), studentCustom);
-
         //重定向
         return "redirect:/admin/showStudent";
     }
@@ -133,16 +192,13 @@ public class AdminController {
         }
         studentService.removeById(id);
         userloginService.removeByName(id.toString());
-
         return "redirect:/admin/showStudent";
     }
 
     // 搜索学生
     @RequestMapping(value = "selectStudent", method = {RequestMethod.POST})
     private String selectStudent(String findByName, Model model) throws Exception {
-
         List<StudentCustom> list = studentService.findByName(findByName);
-
         model.addAttribute("studentList", list);
         return "admin/showStudent";
     }
@@ -152,7 +208,6 @@ public class AdminController {
     // 教师页面显示
     @RequestMapping("/showTeacher")
     public String showTeacher(Model model, Integer page) throws Exception {
-
         List<TeacherCustom> list = null;
         //页码对象
         PagingVO pagingVO = new PagingVO();
@@ -168,28 +223,21 @@ public class AdminController {
 
         model.addAttribute("teacherList", list);
         model.addAttribute("pagingVO", pagingVO);
-
         return "admin/showTeacher";
-
     }
 
     // 添加教师信息
     @RequestMapping(value = "/addTeacher", method = {RequestMethod.GET})
     public String addTeacherUI(Model model) throws Exception {
-
         List<College> list = collegeService.finAll();
-
         model.addAttribute("collegeList", list);
-
         return "admin/addTeacher";
     }
 
     // 添加教师信息处理
     @RequestMapping(value = "/addTeacher", method = {RequestMethod.POST})
     public String addTeacher(TeacherCustom teacherCustom, Model model) throws Exception {
-
         Boolean result = teacherService.save(teacherCustom);
-
         if (!result) {
             model.addAttribute("message", "工号重复");
             return "error";
@@ -200,7 +248,6 @@ public class AdminController {
         userlogin.setPassword("123");
         userlogin.setRole(1);
         userloginService.save(userlogin);
-
         //重定向
         return "redirect:/admin/showTeacher";
     }
@@ -262,7 +309,6 @@ public class AdminController {
     // 课程信息显示
     @RequestMapping("/showCourse")
     public String showCourse(Model model, Integer page) throws Exception {
-
         List<CourseCustom> list = null;
         //页码对象
         PagingVO pagingVO = new PagingVO();
@@ -286,28 +332,21 @@ public class AdminController {
     //添加课程
     @RequestMapping(value = "/addCourse", method = {RequestMethod.GET})
     public String addCourseUI(Model model) throws Exception {
-
         List<TeacherCustom> list = teacherService.findAll();
         List<College> collegeList = collegeService.finAll();
-
         model.addAttribute("collegeList", collegeList);
         model.addAttribute("teacherList", list);
-
         return "admin/addCourse";
     }
 
     // 添加课程信息处理
     @RequestMapping(value = "/addCourse", method = {RequestMethod.POST})
     public String addCourse(CourseCustom courseCustom, Model model) throws Exception {
-
         Boolean result = courseService.save(courseCustom);
-
         if (!result) {
             model.addAttribute("message", "课程号重复");
             return "error";
         }
-
-
         //重定向
         return "redirect:/admin/showCourse";
     }

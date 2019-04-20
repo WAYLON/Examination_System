@@ -51,7 +51,6 @@ public class StudentServiceImpl implements StudentService {
             studentMapper.insert(studentCustoms);
             return true;
         }
-
         return false;
     }
 

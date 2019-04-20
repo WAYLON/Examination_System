@@ -10,9 +10,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by Jacey on 2017/7/5.
- */
+
 public class CourseServiceImplTest {
 
 

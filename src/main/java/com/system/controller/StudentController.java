@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- * Created by Jacey on 2017/7/5.
- */
+
 @Controller
 @RequestMapping(value = "/student")
 public class StudentController {
@@ -58,19 +56,15 @@ public class StudentController {
         //获取当前用户名
         Subject subject = SecurityUtils.getSubject();
         String username = (String) subject.getPrincipal();
-
         SelectedCourseCustom selectedCourseCustom = new SelectedCourseCustom();
         selectedCourseCustom.setCourseid(id);
         selectedCourseCustom.setStudentid(Integer.parseInt(username));
-
         SelectedCourseCustom s = selectedCourseService.findOne(selectedCourseCustom);
-
         if (s == null) {
             selectedCourseService.save(selectedCourseCustom);
         } else {
             throw new CustomException("该门课程你已经选了，不能再选");
         }
-
         return "redirect:/student/selectedCourse";
     }
 
@@ -79,13 +73,10 @@ public class StudentController {
     public String outCourse(int id) throws Exception {
         Subject subject = SecurityUtils.getSubject();
         String username = (String) subject.getPrincipal();
-
         SelectedCourseCustom selectedCourseCustom = new SelectedCourseCustom();
         selectedCourseCustom.setCourseid(id);
         selectedCourseCustom.setStudentid(Integer.parseInt(username));
-
         selectedCourseService.remove(selectedCourseCustom);
-
         return "redirect:/student/selectedCourse";
     }
 

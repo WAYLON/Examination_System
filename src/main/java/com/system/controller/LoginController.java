@@ -8,9 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-/**
- * Created by Jacey on 2017/6/30.
- */
+
 @Controller
 public class LoginController {
 
@@ -28,12 +26,11 @@ public class LoginController {
         UsernamePasswordToken token = new UsernamePasswordToken(userlogin.getUsername(),
                 userlogin.getPassword());
         Subject subject = SecurityUtils.getSubject();
-
         //如果获取不到用户名就是登录失败，但登录失败的话，会直接抛出异常
         subject.login(token);
 
         if (subject.hasRole("admin")) {
-            return "redirect:/admin/showStudent";
+            return "redirect:/admin/showCollege";
         } else if (subject.hasRole("teacher")) {
             return "redirect:/teacher/showCourse";
         } else if (subject.hasRole("student")) {

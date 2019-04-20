@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- * Created by Jacey on 2017/7/6.
- */
 
 @Controller
 @RequestMapping(value = "/teacher")
@@ -60,20 +57,15 @@ public class TeacherController {
     // 打分
     @RequestMapping(value = "/mark", method = {RequestMethod.GET})
     public String markUI(SelectedCourseCustom scc, Model model) throws Exception {
-
         SelectedCourseCustom selectedCourseCustom = selectedCourseService.findOne(scc);
-
         model.addAttribute("selectedCourse", selectedCourseCustom);
-
         return "teacher/mark";
     }
 
     // 打分
     @RequestMapping(value = "/mark", method = {RequestMethod.POST})
     public String mark(SelectedCourseCustom scc) throws Exception {
-
         selectedCourseService.updataOne(scc);
-
         return "redirect:/teacher/gradeCourse?id="+scc.getCourseid();
     }
 
